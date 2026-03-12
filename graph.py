@@ -12,10 +12,11 @@ def parse_benchmark_markdown(md_path, data_shape="Random Ints"):
         for raw_line in file:
             line = raw_line.strip()
 
-            # Capture section headers like: ## Data Size: 1000 elements
-            size_match = re.match(r"##\s+Data Size:\s+(\d+)\s+elements", line)
+            # Capture section headers like: ## Data Size: 1,000 elements or 1000 elements
+            size_match = re.match(r"##\s+Data Size:\s+([\d,]+)\s+elements", line)
             if size_match:
-                current_size = int(size_match.group(1))
+                # Remove commas and convert to int
+                current_size = int(size_match.group(1).replace(",", ""))
                 continue
 
             # Parse markdown table rows.
@@ -81,5 +82,29 @@ def plot_results(results_data, output_path="sorting_graph.png", show_plot=False)
 
 
 if __name__ == "__main__":
-    parsed_results = parse_benchmark_markdown("comprehensive_benchmark.md", data_shape="Random Ints")
+    import sys
+    import os
+    
+    # Try to find a benchmark markdown file
+    default_files = ["benchmark_results.md", "comprehensive_benchmark.md"]
+    md_file = None
+    
+    for filename in default_files:
+        if os.path.exists(filename):
+            md_file = filename
+            break
+    
+    if not md_file:
+        print(f"❌ No benchmark markdown file found. Looked for: {', '.join(default_files)}")
+        print("💡 Run: python3 cli.py --output benchmark_results.md")
+        sys.exit(1)
+    
+    print(f"📊 Generating graph from: {md_file}")
+    parsed_results = parse_benchmark_markdown(md_file, data_shape="Random Ints")
+    
+    if not parsed_results:
+        print("❌ No data found in markdown file.")
+        sys.exit(1)
+    
     plot_results(parsed_results)
+    print(f"✅ Graph saved to: sorting_graph.png")
