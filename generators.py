@@ -53,12 +53,11 @@ def generate_half_sorted(n):
 
 # Registry of all data generators
 GENERATORS = {
-    "Random Ints": generate_random_ints,
-    "Sorted Ints": generate_sorted_ints,
-    "Reverse Sorted": generate_reverse_sorted_ints,
-    "Almost Sorted": generate_almost_sorted,
+    "Random Ints":       generate_random_ints,
+    "Sorted Ints":       generate_sorted_ints,
+    "Reverse Sorted":    generate_reverse_sorted_ints,
+    "Almost Sorted":     generate_almost_sorted,
     "Flat (Few Unique)": generate_flat_ints,
-    "Half Sorted": generate_half_sorted,
-    "Floats": generate_floats,
-    "Strings": generate_strings,
+    "Floats":            generate_floats,
+    "Strings":           generate_strings,
 }
