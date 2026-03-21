@@ -12,4 +12,4 @@ def heap_sort(arr):
     Uses Python's heapq for efficient heap operations.
     """
     heapq.heapify(arr)
-    return [heapq.heappop(arr) for _ in range(len(arr))]
+    arr[:] = [heapq.heappop(arr) for _ in range(len(arr))]

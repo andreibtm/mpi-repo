@@ -1,9 +1,11 @@
 import time
 import random
 import copy
+import csv
 import sys
 import string
 import heapq
+from generators import GENERATORS
 
 
 sys.setrecursionlimit(20000)
@@ -36,7 +38,7 @@ def selection_sort(arr):
 def heap_sort(arr):
     # Using Python's heapq for an efficient O(n log n) in-place-like heap sort
     heapq.heapify(arr)
-    return [heapq.heappop(arr) for _ in range(len(arr))]
+    arr[:] = [heapq.heappop(arr) for _ in range(len(arr))]
 
 def shell_sort(arr):
     n = len(arr)
@@ -144,12 +146,12 @@ def generate_almost_sorted(n, randomness=0.02):
 # 3. BENCHMARKING LOGIC
 # ==========================================
 
-def run_benchmark(sort_function, data, iterations=1):
+def run_benchmark(sort_function, generator, size, iterations=1):
     total_time = 0
     for _ in range(iterations):
-        data_copy = copy.deepcopy(data) 
+        data = generator(size)
         start_time = time.perf_counter()
-        sort_function(data_copy)
+        sort_function(data)
         end_time = time.perf_counter()
         total_time += (end_time - start_time)
     return total_time / iterations
@@ -162,18 +164,14 @@ if __name__ == "__main__":
     # Define test sizes: From tiny to large
     # Note: 1,000,000 is pushing Python's limits for Merge/Quick sort.
     test_cases = {
-        50: 1000,       # Small
-        1000: 100,      # Medium-Small
-        10000: 10,      # Medium
-        100000: 2,      # Large
-        1000000: 1      # Very Large (Only for O(n log n) algos)
-    }
-
-    generators = {
-        "Random Ints": lambda n: [random.randint(0, n*10) for _ in range(n)],
-        "Almost Sorted": lambda n: sorted([random.randint(0, n*10) for _ in range(n)])[:int(n*0.98)] + [random.randint(0, n*10) for _ in range(int(n*0.02))],
-        "Reverse Sorted": lambda n: list(range(n, 0, -1)),
-        "Flat (Few Unique)": lambda n: [random.choice([1, 2, 3, 4, 5]) for _ in range(n)]
+        20: 100000,
+        30: 100000,
+        50: 100000,
+        100: 100000,
+        1000: 1000,
+        10000: 100,
+        100000: 10,
+        1000000: 1
     }
 
     # Map algorithms to their Big-O category
@@ -189,9 +187,12 @@ if __name__ == "__main__":
     }
 
     output_filename = "comprehensive_benchmark.md"
+    csv_filename = output_filename.replace(".md", ".csv")
     
-    with open(output_filename, "w") as md_file:
+    with open(output_filename, "w") as md_file, open(csv_filename, "w", newline="") as csv_file:
         md_file.write("# Comprehensive Sorting Analysis\n\n")
+        writer = csv.writer(csv_file)
+        writer.writerow(["Size", "Algorithm", "Data Shape", "Avg Time (s)", "Status"])
         
         for size, iterations in test_cases.items():
             print(f"Testing Size: {size}...")
@@ -199,21 +200,28 @@ if __name__ == "__main__":
             md_file.write("| Algorithm | Data Shape | Avg Time (s) | Status |\n")
             md_file.write("| :--- | :--- | :--- | :--- |\n")
             
-            for gen_name, generator in generators.items():
-                base_data = generator(size)
-                
+            for gen_name, generator in GENERATORS.items():
                 for alg_name, (func, complexity) in algorithms.items():
+                    # Skip Radix Sort for non-integer types
+                    if alg_name == "Radix Sort" and gen_name in ("Floats", "Strings"):
+                        md_file.write(f"| {alg_name} | {gen_name} | N/A | Skipped (Integers Only) |\n")
+                        writer.writerow([size, alg_name, gen_name, "N/A", "Skipped (Integers Only)"])
+                        continue
+                    
                     # SAFETY CHECK: Skip O(n^2) if size is too large
                     if complexity == "n2" and size > 10000:
                         md_file.write(f"| {alg_name} | {gen_name} | N/A | Skipped (Too Slow) |\n")
+                        writer.writerow([size, alg_name, gen_name, "N/A", "Skipped (Too Slow)"])
                         continue
                     
                     try:
-                        avg_time = run_benchmark(func, base_data, iterations)
+                        avg_time = run_benchmark(func, generator, size, iterations)
                         md_file.write(f"| **{alg_name}** | {gen_name} | {avg_time:.6f} | Success |\n")
+                        writer.writerow([size, alg_name, gen_name, f"{avg_time:.6f}", "Success"])
                     except Exception as e:
                         md_file.write(f"| {alg_name} | {gen_name} | Error | {str(e)[:20]} |\n")
+                        writer.writerow([size, alg_name, gen_name, "Error", str(e)[:20]])
             
             md_file.write("\n---\n\n")
 
-    print(f"Done! Data exported to {output_filename}")
+    print(f"Done! Data exported to {output_filename} and {csv_filename}")

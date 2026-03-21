@@ -44,10 +44,21 @@ def generate_strings(n):
     return [''.join(random.choices(string.ascii_lowercase, k=5)) for _ in range(n)]
 
 
+def generate_half_sorted(n):
+    """First half is sorted, second half is random."""
+    sorted_half = list(range(n // 2))
+    random_half = [random.randint(0, n) for _ in range(n - n // 2)]
+    return sorted_half + random_half
+
+
 # Registry of all data generators
 GENERATORS = {
     "Random Ints": generate_random_ints,
-    "Almost Sorted": generate_almost_sorted,
+    "Sorted Ints": generate_sorted_ints,
     "Reverse Sorted": generate_reverse_sorted_ints,
+    "Almost Sorted": generate_almost_sorted,
     "Flat (Few Unique)": generate_flat_ints,
+    "Half Sorted": generate_half_sorted,
+    "Floats": generate_floats,
+    "Strings": generate_strings,
 }

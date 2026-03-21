@@ -30,7 +30,7 @@ Examples:
 import argparse
 import sys
 import time
-import copy
+import csv
 from algorithms import ALGORITHMS
 from generators import GENERATORS
 
@@ -73,13 +73,13 @@ ALGORITHM_CATEGORIES = {
 }
 
 
-def run_benchmark(sort_function, data, iterations=1):
+def run_benchmark(sort_function, generator, size, iterations=1):
     """Run benchmark for a sorting algorithm."""
     total_time = 0
     for _ in range(iterations):
-        data_copy = copy.deepcopy(data)
+        data = generator(size)
         start_time = time.perf_counter()
-        sort_function(data_copy)
+        sort_function(data)
         end_time = time.perf_counter()
         total_time += (end_time - start_time)
     return total_time / iterations
@@ -110,46 +110,64 @@ def benchmark_suite(algorithms, sizes, iterations=1, output_file="benchmark_resu
             sys.exit(1)
     
     with open(output_file, "w") as md_file:
-        md_file.write("# Sorting Algorithm Benchmark Results\n\n")
+        csv_filename = output_file.replace(".md", ".csv")
+        csv_file = open(csv_filename, "w", newline="")
+        writer = csv.writer(csv_file)
+        writer.writerow(["Size", "Algorithm", "Data Shape", "Avg Time (s)", "Status"])
         
-        for size in sizes:
-            print(f"🔄 Testing size: {size:,} elements...")
-            md_file.write(f"## Data Size: {size:,} elements\n")
-            md_file.write("| Algorithm | Data Shape | Avg Time (s) | Status |\n")
-            md_file.write("| :--- | :--- | :--- | :--- |\n")
+        try:
+            md_file.write("# Sorting Algorithm Benchmark Results\n\n")
             
-            for gen_name, generator in GENERATORS.items():
-                base_data = generator(size)
+            for size in sizes:
+                print(f"🔄 Testing size: {size:,} elements...")
+                md_file.write(f"## Data Size: {size:,} elements\n")
+                md_file.write("| Algorithm | Data Shape | Avg Time (s) | Status |\n")
+                md_file.write("| :--- | :--- | :--- | :--- |\n")
                 
-                for alg_name in algorithms:
-                    func, complexity = ALGORITHMS[alg_name]
-                    
-                    # Safety checks
-                    if complexity == "n2" and size > 10000:
-                        print(f"   ⏭️  {alg_name:20} | {gen_name:20} → Skipped (too slow)")
-                        md_file.write(f"| {alg_name} | {gen_name} | N/A | Skipped (O(n²) too slow) |\n")
-                        continue
-                    
-                    # Parallel algorithms need at least 10K for meaningful results
-                    if "parallel" in complexity.lower() and size < 10000:
-                        print(f"   ⏭️  {alg_name:20} | {gen_name:20} → Skipped (parallel overhead too high)")
-                        md_file.write(f"| {alg_name} | {gen_name} | N/A | Skipped (parallel overhead) |\n")
-                        continue
-                    
-                    try:
-                        avg_time = run_benchmark(func, base_data, iterations)
-                        print(f"   ✓  {alg_name:20} | {gen_name:20} → {avg_time:.6f}s")
-                        md_file.write(f"| **{alg_name}** | {gen_name} | {avg_time:.6f} | Success |\n")
-                    except RecursionError:
-                        print(f"   ❌ {alg_name:20} | {gen_name:20} → RecursionError")
-                        md_file.write(f"| {alg_name} | {gen_name} | Error | RecursionError |\n")
-                    except Exception as e:
-                        print(f"   ❌ {alg_name:20} | {gen_name:20} → {type(e).__name__}")
-                        md_file.write(f"| {alg_name} | {gen_name} | Error | {type(e).__name__} |\n")
-            
-            md_file.write("\n---\n\n")
+                for gen_name, generator in GENERATORS.items():
+                    for alg_name in algorithms:
+                        func, complexity = ALGORITHMS[alg_name]
+                        
+                        # Skip Radix Sort for non-integer types
+                        if alg_name == "Radix Sort" and gen_name in ("Floats", "Strings"):
+                            print(f"   ⏭️  {alg_name:20} | {gen_name:20} → Skipped (Integers Only)")
+                            md_file.write(f"| {alg_name} | {gen_name} | N/A | Skipped (Integers Only) |\n")
+                            writer.writerow([size, alg_name, gen_name, "N/A", "Skipped (Integers Only)"])
+                            continue
+                        
+                        # Safety checks
+                        if complexity == "n2" and size > 10000:
+                            print(f"   ⏭️  {alg_name:20} | {gen_name:20} → Skipped (too slow)")
+                            md_file.write(f"| {alg_name} | {gen_name} | N/A | Skipped (O(n²) too slow) |\n")
+                            writer.writerow([size, alg_name, gen_name, "N/A", "Skipped (O(n²) too slow)"])
+                            continue
+                        
+                        # Parallel algorithms need at least 10K for meaningful results
+                        if "parallel" in complexity.lower() and size < 10000:
+                            print(f"   ⏭️  {alg_name:20} | {gen_name:20} → Skipped (parallel overhead too high)")
+                            md_file.write(f"| {alg_name} | {gen_name} | N/A | Skipped (parallel overhead) |\n")
+                            writer.writerow([size, alg_name, gen_name, "N/A", "Skipped (parallel overhead)"])
+                            continue
+                        
+                        try:
+                            avg_time = run_benchmark(func, generator, size, iterations)
+                            print(f"   ✓  {alg_name:20} | {gen_name:20} → {avg_time:.6f}s")
+                            md_file.write(f"| **{alg_name}** | {gen_name} | {avg_time:.6f} | Success |\n")
+                            writer.writerow([size, alg_name, gen_name, f"{avg_time:.6f}", "Success"])
+                        except RecursionError:
+                            print(f"   ❌ {alg_name:20} | {gen_name:20} → RecursionError")
+                            md_file.write(f"| {alg_name} | {gen_name} | Error | RecursionError |\n")
+                            writer.writerow([size, alg_name, gen_name, "Error", "RecursionError"])
+                        except Exception as e:
+                            print(f"   ❌ {alg_name:20} | {gen_name:20} → {type(e).__name__}")
+                            md_file.write(f"| {alg_name} | {gen_name} | Error | {type(e).__name__} |\n")
+                            writer.writerow([size, alg_name, gen_name, "Error", type(e).__name__])
+                
+                md_file.write("\n---\n\n")
+        finally:
+            csv_file.close()
     
-    print(f"\n✅ Done! Results saved to: {output_file}\n")
+    print(f"\n✅ Done! Results saved to: {output_file} and {csv_filename}\n")
 
 
 
