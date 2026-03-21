@@ -1,0 +1,169 @@
+Size,Iterations,Algorithm,Data Shape,Avg Time (s),Status
+20,100000,Bubble Sort,Random Ints,0.000011,Success
+20,100000,Selection Sort,Random Ints,0.000007,Success
+20,100000,Insertion Sort,Random Ints,0.000006,Success
+20,100000,Bubble Sort,Sorted Ints,0.000001,Success
+20,100000,Selection Sort,Sorted Ints,0.000006,Success
+20,100000,Insertion Sort,Sorted Ints,0.000001,Success
+20,100000,Bubble Sort,Reverse Sorted,0.000014,Success
+20,100000,Selection Sort,Reverse Sorted,0.000007,Success
+20,100000,Insertion Sort,Reverse Sorted,0.000010,Success
+20,100000,Bubble Sort,Almost Sorted,0.000004,Success
+20,100000,Selection Sort,Almost Sorted,0.000006,Success
+20,100000,Insertion Sort,Almost Sorted,0.000002,Success
+20,100000,Bubble Sort,Half Sorted,0.000008,Success
+20,100000,Selection Sort,Half Sorted,0.000007,Success
+20,100000,Insertion Sort,Half Sorted,0.000003,Success
+20,100000,Bubble Sort,Flat (Few Unique),0.000010,Success
+20,100000,Selection Sort,Flat (Few Unique),0.000007,Success
+20,100000,Insertion Sort,Flat (Few Unique),0.000005,Success
+20,100000,Bubble Sort,Floats,0.000010,Success
+20,100000,Selection Sort,Floats,0.000007,Success
+20,100000,Insertion Sort,Floats,0.000006,Success
+20,100000,Bubble Sort,Strings,0.000011,Success
+20,100000,Selection Sort,Strings,0.000007,Success
+20,100000,Insertion Sort,Strings,0.000006,Success
+30,100000,Bubble Sort,Random Ints,0.000023,Success
+30,100000,Selection Sort,Random Ints,0.000013,Success
+30,100000,Insertion Sort,Random Ints,0.000012,Success
+30,100000,Bubble Sort,Sorted Ints,0.000001,Success
+30,100000,Selection Sort,Sorted Ints,0.000012,Success
+30,100000,Insertion Sort,Sorted Ints,0.000002,Success
+30,100000,Bubble Sort,Reverse Sorted,0.000031,Success
+30,100000,Selection Sort,Reverse Sorted,0.000013,Success
+30,100000,Insertion Sort,Reverse Sorted,0.000021,Success
+30,100000,Bubble Sort,Almost Sorted,0.000008,Success
+30,100000,Selection Sort,Almost Sorted,0.000013,Success
+30,100000,Insertion Sort,Almost Sorted,0.000003,Success
+30,100000,Bubble Sort,Half Sorted,0.000018,Success
+30,100000,Selection Sort,Half Sorted,0.000013,Success
+30,100000,Insertion Sort,Half Sorted,0.000007,Success
+30,100000,Bubble Sort,Flat (Few Unique),0.000021,Success
+30,100000,Selection Sort,Flat (Few Unique),0.000014,Success
+30,100000,Insertion Sort,Flat (Few Unique),0.000010,Success
+30,100000,Bubble Sort,Floats,0.000023,Success
+30,100000,Selection Sort,Floats,0.000013,Success
+30,100000,Insertion Sort,Floats,0.000012,Success
+30,100000,Bubble Sort,Strings,0.000025,Success
+30,100000,Selection Sort,Strings,0.000015,Success
+30,100000,Insertion Sort,Strings,0.000013,Success
+50,100000,Bubble Sort,Random Ints,0.000063,Success
+50,100000,Selection Sort,Random Ints,0.000032,Success
+50,100000,Insertion Sort,Random Ints,0.000030,Success
+50,100000,Bubble Sort,Sorted Ints,0.000002,Success
+50,100000,Selection Sort,Sorted Ints,0.000031,Success
+50,100000,Insertion Sort,Sorted Ints,0.000003,Success
+50,100000,Bubble Sort,Reverse Sorted,0.000086,Success
+50,100000,Selection Sort,Reverse Sorted,0.000033,Success
+50,100000,Insertion Sort,Reverse Sorted,0.000057,Success
+50,100000,Bubble Sort,Almost Sorted,0.000021,Success
+50,100000,Selection Sort,Almost Sorted,0.000031,Success
+50,100000,Insertion Sort,Almost Sorted,0.000004,Success
+50,100000,Bubble Sort,Half Sorted,0.000049,Success
+50,100000,Selection Sort,Half Sorted,0.000032,Success
+50,100000,Insertion Sort,Half Sorted,0.000016,Success
+50,100000,Bubble Sort,Flat (Few Unique),0.000056,Success
+50,100000,Selection Sort,Flat (Few Unique),0.000033,Success
+50,100000,Insertion Sort,Flat (Few Unique),0.000025,Success
+50,100000,Bubble Sort,Floats,0.000062,Success
+50,100000,Selection Sort,Floats,0.000032,Success
+50,100000,Insertion Sort,Floats,0.000030,Success
+50,100000,Bubble Sort,Strings,0.000067,Success
+50,100000,Selection Sort,Strings,0.000037,Success
+50,100000,Insertion Sort,Strings,0.000033,Success
+100,100000,Bubble Sort,Random Ints,0.000247,Success
+100,100000,Selection Sort,Random Ints,0.000117,Success
+100,100000,Insertion Sort,Random Ints,0.000114,Success
+100,100000,Bubble Sort,Sorted Ints,0.000003,Success
+100,100000,Selection Sort,Sorted Ints,0.000115,Success
+100,100000,Insertion Sort,Sorted Ints,0.000005,Success
+100,100000,Bubble Sort,Reverse Sorted,0.000334,Success
+100,100000,Selection Sort,Reverse Sorted,0.000120,Success
+100,100000,Insertion Sort,Reverse Sorted,0.000225,Success
+100,100000,Bubble Sort,Almost Sorted,0.000101,Success
+100,100000,Selection Sort,Almost Sorted,0.000115,Success
+100,100000,Insertion Sort,Almost Sorted,0.000011,Success
+100,100000,Bubble Sort,Half Sorted,0.000196,Success
+100,100000,Selection Sort,Half Sorted,0.000118,Success
+100,100000,Insertion Sort,Half Sorted,0.000059,Success
+100,100000,Bubble Sort,Flat (Few Unique),0.000221,Success
+100,100000,Selection Sort,Flat (Few Unique),0.000123,Success
+100,100000,Insertion Sort,Flat (Few Unique),0.000093,Success
+100,100000,Bubble Sort,Floats,0.000245,Success
+100,100000,Selection Sort,Floats,0.000116,Success
+100,100000,Insertion Sort,Floats,0.000114,Success
+100,100000,Bubble Sort,Strings,0.000265,Success
+100,100000,Selection Sort,Strings,0.000137,Success
+100,100000,Insertion Sort,Strings,0.000125,Success
+1000,1000,Bubble Sort,Random Ints,0.027893,Success
+1000,1000,Selection Sort,Random Ints,0.012550,Success
+1000,1000,Insertion Sort,Random Ints,0.012521,Success
+1000,1000,Bubble Sort,Sorted Ints,0.000033,Success
+1000,1000,Selection Sort,Sorted Ints,0.012498,Success
+1000,1000,Insertion Sort,Sorted Ints,0.000059,Success
+1000,1000,Bubble Sort,Reverse Sorted,0.037158,Success
+1000,1000,Selection Sort,Reverse Sorted,0.012669,Success
+1000,1000,Insertion Sort,Reverse Sorted,0.024159,Success
+1000,1000,Bubble Sort,Almost Sorted,0.015818,Success
+1000,1000,Selection Sort,Almost Sorted,0.012460,Success
+1000,1000,Insertion Sort,Almost Sorted,0.000728,Success
+1000,1000,Bubble Sort,Half Sorted,0.022258,Success
+1000,1000,Selection Sort,Half Sorted,0.012410,Success
+1000,1000,Insertion Sort,Half Sorted,0.006369,Success
+1000,1000,Bubble Sort,Flat (Few Unique),0.025262,Success
+1000,1000,Selection Sort,Flat (Few Unique),0.013491,Success
+1000,1000,Insertion Sort,Flat (Few Unique),0.010337,Success
+1000,1000,Bubble Sort,Floats,0.027822,Success
+1000,1000,Selection Sort,Floats,0.012677,Success
+1000,1000,Insertion Sort,Floats,0.012705,Success
+1000,1000,Bubble Sort,Strings,0.029399,Success
+1000,1000,Selection Sort,Strings,0.014571,Success
+1000,1000,Insertion Sort,Strings,0.013682,Success
+5000,1,Bubble Sort,Random Ints,0.781644,Success
+5000,1,Selection Sort,Random Ints,0.329336,Success
+5000,1,Insertion Sort,Random Ints,0.335258,Success
+5000,1,Bubble Sort,Sorted Ints,0.000176,Success
+5000,1,Selection Sort,Sorted Ints,0.322524,Success
+5000,1,Insertion Sort,Sorted Ints,0.000325,Success
+5000,1,Bubble Sort,Reverse Sorted,0.974981,Success
+5000,1,Selection Sort,Reverse Sorted,0.326490,Success
+5000,1,Insertion Sort,Reverse Sorted,0.657891,Success
+5000,1,Bubble Sort,Almost Sorted,0.419747,Success
+5000,1,Selection Sort,Almost Sorted,0.322468,Success
+5000,1,Insertion Sort,Almost Sorted,0.018334,Success
+5000,1,Bubble Sort,Half Sorted,0.617774,Success
+5000,1,Selection Sort,Half Sorted,0.323000,Success
+5000,1,Insertion Sort,Half Sorted,0.168930,Success
+5000,1,Bubble Sort,Flat (Few Unique),0.641211,Success
+5000,1,Selection Sort,Flat (Few Unique),0.325227,Success
+5000,1,Insertion Sort,Flat (Few Unique),0.255657,Success
+5000,1,Bubble Sort,Floats,0.722964,Success
+5000,1,Selection Sort,Floats,0.304425,Success
+5000,1,Insertion Sort,Floats,0.329653,Success
+5000,1,Bubble Sort,Strings,0.765839,Success
+5000,1,Selection Sort,Strings,0.367474,Success
+5000,1,Insertion Sort,Strings,0.355585,Success
+10000,100,Bubble Sort,Random Ints,2.962693,Success
+10000,100,Selection Sort,Random Ints,1.255970,Success
+10000,100,Insertion Sort,Random Ints,1.331512,Success
+10000,100,Bubble Sort,Sorted Ints,0.000341,Success
+10000,100,Selection Sort,Sorted Ints,1.261343,Success
+10000,100,Insertion Sort,Sorted Ints,0.000608,Success
+10000,100,Bubble Sort,Reverse Sorted,4.077016,Success
+10000,100,Selection Sort,Reverse Sorted,1.259305,Success
+10000,100,Insertion Sort,Reverse Sorted,2.557500,Success
+10000,100,Bubble Sort,Almost Sorted,1.868082,Success
+10000,100,Selection Sort,Almost Sorted,1.769752,Success
+10000,100,Insertion Sort,Almost Sorted,0.096984,Success
+10000,100,Bubble Sort,Half Sorted,2.567679,Success
+10000,100,Selection Sort,Half Sorted,1.228960,Success
+10000,100,Insertion Sort,Half Sorted,0.647695,Success
+10000,100,Bubble Sort,Flat (Few Unique),2.563378,Success
+10000,100,Selection Sort,Flat (Few Unique),1.288392,Success
+10000,100,Insertion Sort,Flat (Few Unique),1.114900,Success
+10000,100,Bubble Sort,Floats,2.929794,Success
+10000,100,Selection Sort,Floats,1.230870,Success
+10000,100,Insertion Sort,Floats,1.312253,Success
+10000,100,Bubble Sort,Strings,3.255061,Success
+10000,100,Selection Sort,Strings,1.456584,Success
+10000,100,Insertion Sort,Strings,1.425104,Success

@@ -1,250 +1,239 @@
 """
-Command-line interface for sorting algorithm benchmarks.
+Sorting Algorithm Benchmark Suite
+==================================
+The single entry point for running all benchmarks.
 
-Features:
-  - Compare basic array-based sorting algorithms
-  - Compare linked list implementations (sequential access vs array random access)
-  - Test parallel multi-core sorting (uses multiprocessing)
-  - Supports custom input sizes and data patterns
+Usage examples
+--------------
+# Full run — all algorithms, all data shapes, sensible default sizes
+python cli.py
 
-Examples:
-  # Basic comparison: classic algorithms
-  python cli.py --algorithms "Bubble Sort" "Quick Sort" --sizes 1000 10000 100000
+# Only the fast O(n log n) algorithms, custom sizes
+python cli.py --category fast --sizes 10000 100000 1000000
 
-  # All algorithms with default sizes
-  python cli.py --algorithms all
+# Only the O(n²) algorithms with small sizes and many iterations
+python cli.py --category slow --sizes 20 30 50 100 --iterations 10000
 
-  # Linked list comparison: array vs linked structures
-  python cli.py --category linked-list --sizes 10000 100000
+# Linked list comparison
+python cli.py --category linked --sizes 1000 10000 100000
 
-  # Parallel sorting: single-core vs multi-core (requires large sizes to show benefit)
-  python cli.py --category parallel --sizes 100000 1000000 --iterations 2
+# Parallel sorting (needs large inputs to beat single-core)
+python cli.py --category parallel --sizes 100000 1000000
 
-  # Radix sort and other integer-based algorithms
-  python cli.py --algorithms "Radix Sort" "Quick Sort" "Merge Sort" --sizes 50000 500000
+# Specific algorithms, specific sizes
+python cli.py --algorithms "Quick Sort" "Merge Sort" "Radix Sort" --sizes 50000 500000
 
-  # Custom output file and iterations
-  python cli.py --algorithms all --output my_results.md --iterations 3
+# Save results to a custom file
+python cli.py --output my_results.md
 """
 
 import argparse
+import csv
 import sys
 import time
-import csv
+
 from algorithms import ALGORITHMS
 from generators import GENERATORS
 
+# ── Constants ──────────────────────────────────────────────────────────────────
 
-# Algorithm categories for easy selection
-ALGORITHM_CATEGORIES = {
-    "basic": [
-        "Bubble Sort",
-        "Selection Sort",
-        "Insertion Sort",
-        "Shell Sort",
-        "Heap Sort",
-        "Merge Sort",
-        "Quick Sort",
-        "Python Timsort",
-    ],
-    "integer": [
-        "Radix Sort",
-        "Merge Sort",
-        "Quick Sort",
-        "Python Timsort",
-    ],
-    "linked-list": [
-        "LL Merge Sort",
-        "LL Insertion Sort",
-    ],
-    "parallel": [
-        "Parallel Merge Sort",
-        "Python Timsort",
-        "Merge Sort",
-    ],
-    "comparison": [
-        # Array-based algorithms
-        "Merge Sort",
-        # Linked list equivalents
-        "LL Merge Sort",
-        # Parallel variant
-        "Parallel Merge Sort",
-    ],
+# Algorithms that only work on integers
+INTEGER_ONLY = {"Radix Sort"}
+
+# Default sizes and their iteration counts.
+# Small sizes get many iterations so individual timings are meaningful.
+DEFAULT_SIZES = {
+    20:       100_000,
+    30:       100_000,
+    50:       100_000,
+    100:      100_000,
+    1_000:    1_000,
+    10_000:   100,
+    100_000:  10,
+    1_000_000: 1,
 }
 
+# Category presets
+CATEGORIES = {
+    "all":     sorted(ALGORITHMS.keys()),
+    "fast":    ["Shell Sort", "Heap Sort", "Merge Sort", "Quick Sort",
+                "Python Timsort", "Radix Sort"],
+    "slow":    ["Bubble Sort", "Selection Sort", "Insertion Sort"],
+    "linked":  ["LL Merge Sort", "LL Insertion Sort", "Merge Sort", "Insertion Sort"],
+    "parallel":["Parallel Merge Sort", "Python Timsort", "Merge Sort"],
+    "integer": ["Radix Sort", "Quick Sort", "Merge Sort", "Python Timsort"],
+}
 
-def run_benchmark(sort_function, generator, size, iterations=1):
-    """Run benchmark for a sorting algorithm."""
-    total_time = 0
+# ── Skip logic ─────────────────────────────────────────────────────────────────
+
+def should_skip(alg_name, complexity, gen_name, size):
+    """Return a skip reason string, or None if the test should run."""
+    if complexity == "n2" and size > 10_000:
+        return "Skipped — O(n²) too slow"
+    if complexity == "linked" and size > 500_000:
+        return "Skipped — LL overhead too high"
+    if complexity == "parallel" and size < 10_000:
+        return "Skipped — parallel overhead dominates"
+    if alg_name in INTEGER_ONLY and gen_name in ("Floats", "Strings"):
+        return "Skipped — integers only"
+    return None
+
+# ── Benchmark runner ───────────────────────────────────────────────────────────
+
+def run_benchmark(func, generator, size, iterations):
+    """
+    Run `func` on `iterations` freshly-generated lists of length `size`.
+    Returns the average time in seconds.
+    Fresh data is generated each iteration so small-list results are
+    statistically meaningful across different random inputs.
+    """
+    total = 0.0
     for _ in range(iterations):
         data = generator(size)
-        start_time = time.perf_counter()
-        sort_function(data)
-        end_time = time.perf_counter()
-        total_time += (end_time - start_time)
-    return total_time / iterations
+        t0 = time.perf_counter()
+        func(data)
+        total += time.perf_counter() - t0
+    return total / iterations
 
+# ── Output helpers ─────────────────────────────────────────────────────────────
 
-def benchmark_suite(algorithms, sizes, iterations=1, output_file="benchmark_results.md"):
-    """
-    Run a complete benchmark suite.
-    
-    Args:
-        algorithms: List of algorithm names to test
-        sizes: List of input sizes to test
-        iterations: Number of iterations per test
-        output_file: Output markdown filename
-    """
-    print(f"\n📊 Sorting Algorithm Benchmark Suite")
-    print(f"   Output: {output_file}")
-    print(f"   Algorithms: {len(algorithms)}")
-    print(f"   Sizes: {sizes}")
-    print(f"   Iterations per test: {iterations}\n")
-    
-    # Validate algorithms
-    available = set(ALGORITHMS.keys())
-    for alg in algorithms:
-        if alg not in available:
-            print(f"❌ Algorithm '{alg}' not found.")
-            print(f"   Available: {', '.join(sorted(available))}")
-            sys.exit(1)
-    
-    with open(output_file, "w") as md_file:
-        csv_filename = output_file.replace(".md", ".csv")
-        csv_file = open(csv_filename, "w", newline="")
-        writer = csv.writer(csv_file)
-        writer.writerow(["Size", "Algorithm", "Data Shape", "Avg Time (s)", "Status"])
-        
-        try:
-            md_file.write("# Sorting Algorithm Benchmark Results\n\n")
-            
-            for size in sizes:
-                print(f"🔄 Testing size: {size:,} elements...")
-                md_file.write(f"## Data Size: {size:,} elements\n")
-                md_file.write("| Algorithm | Data Shape | Avg Time (s) | Status |\n")
-                md_file.write("| :--- | :--- | :--- | :--- |\n")
-                
-                for gen_name, generator in GENERATORS.items():
-                    for alg_name in algorithms:
-                        func, complexity = ALGORITHMS[alg_name]
-                        
-                        # Skip Radix Sort for non-integer types
-                        if alg_name == "Radix Sort" and gen_name in ("Floats", "Strings"):
-                            print(f"   ⏭️  {alg_name:20} | {gen_name:20} → Skipped (Integers Only)")
-                            md_file.write(f"| {alg_name} | {gen_name} | N/A | Skipped (Integers Only) |\n")
-                            writer.writerow([size, alg_name, gen_name, "N/A", "Skipped (Integers Only)"])
-                            continue
-                        
-                        # Safety checks
-                        if complexity == "n2" and size > 10000:
-                            print(f"   ⏭️  {alg_name:20} | {gen_name:20} → Skipped (too slow)")
-                            md_file.write(f"| {alg_name} | {gen_name} | N/A | Skipped (O(n²) too slow) |\n")
-                            writer.writerow([size, alg_name, gen_name, "N/A", "Skipped (O(n²) too slow)"])
-                            continue
-                        
-                        # Parallel algorithms need at least 10K for meaningful results
-                        if "parallel" in complexity.lower() and size < 10000:
-                            print(f"   ⏭️  {alg_name:20} | {gen_name:20} → Skipped (parallel overhead too high)")
-                            md_file.write(f"| {alg_name} | {gen_name} | N/A | Skipped (parallel overhead) |\n")
-                            writer.writerow([size, alg_name, gen_name, "N/A", "Skipped (parallel overhead)"])
-                            continue
-                        
-                        try:
-                            avg_time = run_benchmark(func, generator, size, iterations)
-                            print(f"   ✓  {alg_name:20} | {gen_name:20} → {avg_time:.6f}s")
-                            md_file.write(f"| **{alg_name}** | {gen_name} | {avg_time:.6f} | Success |\n")
-                            writer.writerow([size, alg_name, gen_name, f"{avg_time:.6f}", "Success"])
-                        except RecursionError:
-                            print(f"   ❌ {alg_name:20} | {gen_name:20} → RecursionError")
-                            md_file.write(f"| {alg_name} | {gen_name} | Error | RecursionError |\n")
-                            writer.writerow([size, alg_name, gen_name, "Error", "RecursionError"])
-                        except Exception as e:
-                            print(f"   ❌ {alg_name:20} | {gen_name:20} → {type(e).__name__}")
-                            md_file.write(f"| {alg_name} | {gen_name} | Error | {type(e).__name__} |\n")
-                            writer.writerow([size, alg_name, gen_name, "Error", type(e).__name__])
-                
-                md_file.write("\n---\n\n")
-        finally:
-            csv_file.close()
-    
-    print(f"\n✅ Done! Results saved to: {output_file} and {csv_filename}\n")
+def iterations_for_size(size, user_override):
+    """Return how many iterations to use for this size."""
+    if user_override is not None:
+        return user_override
+    return DEFAULT_SIZES.get(size, 1)
 
+# ── Main benchmark suite ───────────────────────────────────────────────────────
 
+def benchmark_suite(algorithms, sizes, iterations_override, md_path):
+    csv_path = md_path.replace(".md", ".csv")
+
+    print(f"\n  Sorting Benchmark Suite")
+    print(f"  Algorithms : {len(algorithms)}")
+    print(f"  Sizes      : {sizes}")
+    print(f"  Output     : {md_path}  +  {csv_path}\n")
+
+    # Validate algorithm names up front
+    unknown = [a for a in algorithms if a not in ALGORITHMS]
+    if unknown:
+        print(f"Unknown algorithms: {unknown}")
+        print(f"Available: {sorted(ALGORITHMS.keys())}")
+        sys.exit(1)
+
+    with open(md_path, "w") as md, open(csv_path, "w", newline="") as cf:
+        writer = csv.writer(cf)
+        writer.writerow(["Size", "Iterations", "Algorithm", "Data Shape",
+                         "Avg Time (s)", "Status"])
+
+        md.write("# Sorting Algorithm Benchmark Results\n\n")
+        md.write("> Generated by `cli.py`\n\n")
+
+        for size in sorted(sizes):
+            iters = iterations_for_size(size, iterations_override)
+            print(f"  Size {size:>10,}  ({iters:,} iterations each)")
+
+            md.write(f"## Size: {size:,} elements  ×  {iters:,} iterations\n\n")
+            md.write("| Algorithm | Data Shape | Avg Time (s) | Status |\n")
+            md.write("| :--- | :--- | ---: | :--- |\n")
+
+            for gen_name, generator in GENERATORS.items():
+                for alg_name in algorithms:
+                    func, complexity = ALGORITHMS[alg_name]
+
+                    reason = should_skip(alg_name, complexity, gen_name, size)
+                    if reason:
+                        md.write(f"| {alg_name} | {gen_name} | — | {reason} |\n")
+                        writer.writerow([size, iters, alg_name, gen_name, "", reason])
+                        continue
+
+                    try:
+                        avg = run_benchmark(func, generator, size, iters)
+                        print(f"    {'✓':1}  {alg_name:<22} | {gen_name:<20} | {avg:.6f}s")
+                        md.write(f"| **{alg_name}** | {gen_name} | {avg:.6f} | ✓ |\n")
+                        writer.writerow([size, iters, alg_name, gen_name,
+                                         f"{avg:.6f}", "Success"])
+                    except RecursionError:
+                        msg = "RecursionError"
+                        print(f"    {'✗':1}  {alg_name:<22} | {gen_name:<20} | {msg}")
+                        md.write(f"| {alg_name} | {gen_name} | — | {msg} |\n")
+                        writer.writerow([size, iters, alg_name, gen_name, "", msg])
+                    except Exception as e:
+                        msg = type(e).__name__
+                        print(f"    {'✗':1}  {alg_name:<22} | {gen_name:<20} | {msg}")
+                        md.write(f"| {alg_name} | {gen_name} | — | {msg} |\n")
+                        writer.writerow([size, iters, alg_name, gen_name, "", msg])
+
+            md.write("\n---\n\n")
+            print()
+
+    print(f"  Done!  {md_path}  and  {csv_path}\n")
+
+# ── CLI ────────────────────────────────────────────────────────────────────────
 
 def main():
     parser = argparse.ArgumentParser(
-        description="Benchmark sorting algorithms with different input sizes and types.",
-        epilog="Categories:\n"
-               "  basic       - Classic array-based algorithms (8 algorithms)\n"
-               "  integer     - Optimized for integers: Radix Sort and comparison sorts\n"
-               "  linked-list - Linked list variants: LL Merge Sort, LL Insertion Sort\n"
-               "  parallel    - Multi-core variants using multiprocessing\n"
-               "  comparison  - Compare Array vs LL vs Parallel Merge Sort\n\n"
-               "Examples:\n"
-               "  python cli.py --algorithms 'Bubble Sort' 'Quick Sort' --sizes 1000 10000\n"
-               "  python cli.py --category linked-list --sizes 10000 100000\n"
-               "  python cli.py --category parallel --sizes 100000 1000000",
-        formatter_class=argparse.RawDescriptionHelpFormatter
+        description="Benchmark sorting algorithms.",
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+        epilog="""
+Categories
+----------
+  all      — every algorithm (default)
+  fast     — O(n log n) + Radix Sort
+  slow     — O(n²) algorithms only
+  linked   — linked list variants vs array equivalents
+  parallel — parallel merge sort vs single-core
+  integer  — integer-optimised algorithms
+
+Examples
+--------
+  python cli.py
+  python cli.py --category fast --sizes 100000 1000000
+  python cli.py --category slow --sizes 20 30 50 100 --iterations 100000
+  python cli.py --algorithms "Quick Sort" "Merge Sort" --sizes 10000 100000
+        """
     )
-    
     parser.add_argument(
-        "--algorithms",
-        nargs="+",
-        default=None,
-        help="Specific algorithm names. Use 'all' for all algorithms. "
-             "Available: " + ", ".join(sorted(ALGORITHMS.keys()))
+        "--algorithms", nargs="+", default=None,
+        help="Specific algorithm names (space-separated)."
     )
-    
     parser.add_argument(
-        "--category",
-        type=str,
-        default=None,
-        choices=list(ALGORITHM_CATEGORIES.keys()),
-        help="Algorithm category preset (overrides --algorithms if both specified)"
+        "--category", choices=list(CATEGORIES.keys()), default=None,
+        help="Preset algorithm group (overrides --algorithms)."
     )
-    
     parser.add_argument(
-        "--sizes",
-        type=int,
-        nargs="+",
-        default=[50, 1000, 10000, 100000, 1000000],
-        help="Input sizes to test (default: 50 1000 10000 100000 1000000)"
+        "--sizes", type=int, nargs="+", default=None,
+        help="Input sizes to test. Defaults: 20 30 50 100 1000 10000 100000 1000000"
     )
-    
     parser.add_argument(
-        "--iterations",
-        type=int,
-        default=1,
-        help="Number of iterations per test (default: 1)"
+        "--iterations", type=int, default=None,
+        help="Override iteration count for every size (default: auto-scaled per size)."
     )
-    
     parser.add_argument(
-        "--output",
-        type=str,
-        default="benchmark_results.md",
-        help="Output markdown filename (default: benchmark_results.md)"
+        "--output", default="benchmark_results.md",
+        help="Markdown output filename (a .csv is also written alongside it)."
     )
-    
+
     args = parser.parse_args()
-    
-    # Resolve algorithms
+
+    # Resolve algorithm list
     if args.category:
-        algorithms = ALGORITHM_CATEGORIES[args.category]
-        print(f"📁 Using category '{args.category}': {len(algorithms)} algorithms")
-    elif args.algorithms and args.algorithms != ["all"]:
+        algorithms = CATEGORIES[args.category]
+    elif args.algorithms:
         algorithms = args.algorithms
     else:
-        algorithms = sorted(ALGORITHMS.keys())
-    
-    # Set recursion limit for deep sorts
-    sys.setrecursionlimit(20000)
-    
-    # Run benchmark
+        algorithms = CATEGORIES["all"]
+
+    # Resolve sizes
+    if args.sizes:
+        sizes = sorted(set(args.sizes))
+    else:
+        sizes = sorted(DEFAULT_SIZES.keys())
+
     benchmark_suite(
         algorithms=algorithms,
-        sizes=sorted(set(args.sizes)),  # Remove duplicates and sort
-        iterations=args.iterations,
-        output_file=args.output
+        sizes=sizes,
+        iterations_override=args.iterations,
+        md_path=args.output,
     )
 
 
