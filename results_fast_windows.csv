@@ -1,0 +1,385 @@
+Size,Iterations,Algorithm,Data Shape,Avg Time (s),Status
+20,100000,Shell Sort,Random Ints,0.000004,Success
+20,100000,Heap Sort,Random Ints,0.000001,Success
+20,100000,Merge Sort,Random Ints,0.000009,Success
+20,100000,Quick Sort,Random Ints,0.000009,Success
+20,100000,Python Timsort,Random Ints,0.000001,Success
+20,100000,Radix Sort,Random Ints,0.000006,Success
+20,100000,Shell Sort,Sorted Ints,0.000002,Success
+20,100000,Heap Sort,Sorted Ints,0.000001,Success
+20,100000,Merge Sort,Sorted Ints,0.000008,Success
+20,100000,Quick Sort,Sorted Ints,0.000009,Success
+20,100000,Python Timsort,Sorted Ints,0.000000,Success
+20,100000,Radix Sort,Sorted Ints,0.000004,Success
+20,100000,Shell Sort,Reverse Sorted,0.000004,Success
+20,100000,Heap Sort,Reverse Sorted,0.000001,Success
+20,100000,Merge Sort,Reverse Sorted,0.000008,Success
+20,100000,Quick Sort,Reverse Sorted,0.000009,Success
+20,100000,Python Timsort,Reverse Sorted,0.000000,Success
+20,100000,Radix Sort,Reverse Sorted,0.000004,Success
+20,100000,Shell Sort,Almost Sorted,0.000003,Success
+20,100000,Heap Sort,Almost Sorted,0.000001,Success
+20,100000,Merge Sort,Almost Sorted,0.000008,Success
+20,100000,Quick Sort,Almost Sorted,0.000009,Success
+20,100000,Python Timsort,Almost Sorted,0.000000,Success
+20,100000,Radix Sort,Almost Sorted,0.000004,Success
+20,100000,Shell Sort,Half Sorted,0.000004,Success
+20,100000,Heap Sort,Half Sorted,0.000002,Success
+20,100000,Merge Sort,Half Sorted,0.000009,Success
+20,100000,Quick Sort,Half Sorted,0.000008,Success
+20,100000,Python Timsort,Half Sorted,0.000000,Success
+20,100000,Radix Sort,Half Sorted,0.000004,Success
+20,100000,Shell Sort,Flat (Few Unique),0.000004,Success
+20,100000,Heap Sort,Flat (Few Unique),0.000002,Success
+20,100000,Merge Sort,Flat (Few Unique),0.000009,Success
+20,100000,Quick Sort,Flat (Few Unique),0.000004,Success
+20,100000,Python Timsort,Flat (Few Unique),0.000000,Success
+20,100000,Radix Sort,Flat (Few Unique),0.000003,Success
+20,100000,Shell Sort,Floats,0.000005,Success
+20,100000,Heap Sort,Floats,0.000001,Success
+20,100000,Merge Sort,Floats,0.000009,Success
+20,100000,Quick Sort,Floats,0.000010,Success
+20,100000,Python Timsort,Floats,0.000000,Success
+20,100000,Radix Sort,Floats,,Skipped — integers only
+20,100000,Shell Sort,Strings,0.000005,Success
+20,100000,Heap Sort,Strings,0.000002,Success
+20,100000,Merge Sort,Strings,0.000010,Success
+20,100000,Quick Sort,Strings,0.000011,Success
+20,100000,Python Timsort,Strings,0.000001,Success
+20,100000,Radix Sort,Strings,,Skipped — integers only
+30,100000,Shell Sort,Random Ints,0.000008,Success
+30,100000,Heap Sort,Random Ints,0.000003,Success
+30,100000,Merge Sort,Random Ints,0.000015,Success
+30,100000,Quick Sort,Random Ints,0.000015,Success
+30,100000,Python Timsort,Random Ints,0.000001,Success
+30,100000,Radix Sort,Random Ints,0.000008,Success
+30,100000,Shell Sort,Sorted Ints,0.000004,Success
+30,100000,Heap Sort,Sorted Ints,0.000002,Success
+30,100000,Merge Sort,Sorted Ints,0.000013,Success
+30,100000,Quick Sort,Sorted Ints,0.000015,Success
+30,100000,Python Timsort,Sorted Ints,0.000000,Success
+30,100000,Radix Sort,Sorted Ints,0.000005,Success
+30,100000,Shell Sort,Reverse Sorted,0.000006,Success
+30,100000,Heap Sort,Reverse Sorted,0.000002,Success
+30,100000,Merge Sort,Reverse Sorted,0.000013,Success
+30,100000,Quick Sort,Reverse Sorted,0.000015,Success
+30,100000,Python Timsort,Reverse Sorted,0.000000,Success
+30,100000,Radix Sort,Reverse Sorted,0.000005,Success
+30,100000,Shell Sort,Almost Sorted,0.000004,Success
+30,100000,Heap Sort,Almost Sorted,0.000002,Success
+30,100000,Merge Sort,Almost Sorted,0.000013,Success
+30,100000,Quick Sort,Almost Sorted,0.000015,Success
+30,100000,Python Timsort,Almost Sorted,0.000000,Success
+30,100000,Radix Sort,Almost Sorted,0.000005,Success
+30,100000,Shell Sort,Half Sorted,0.000006,Success
+30,100000,Heap Sort,Half Sorted,0.000002,Success
+30,100000,Merge Sort,Half Sorted,0.000014,Success
+30,100000,Quick Sort,Half Sorted,0.000012,Success
+30,100000,Python Timsort,Half Sorted,0.000001,Success
+30,100000,Radix Sort,Half Sorted,0.000005,Success
+30,100000,Shell Sort,Flat (Few Unique),0.000006,Success
+30,100000,Heap Sort,Flat (Few Unique),0.000002,Success
+30,100000,Merge Sort,Flat (Few Unique),0.000014,Success
+30,100000,Quick Sort,Flat (Few Unique),0.000005,Success
+30,100000,Python Timsort,Flat (Few Unique),0.000001,Success
+30,100000,Radix Sort,Flat (Few Unique),0.000003,Success
+30,100000,Shell Sort,Floats,0.000007,Success
+30,100000,Heap Sort,Floats,0.000002,Success
+30,100000,Merge Sort,Floats,0.000015,Success
+30,100000,Quick Sort,Floats,0.000016,Success
+30,100000,Python Timsort,Floats,0.000001,Success
+30,100000,Radix Sort,Floats,,Skipped — integers only
+30,100000,Shell Sort,Strings,0.000008,Success
+30,100000,Heap Sort,Strings,0.000003,Success
+30,100000,Merge Sort,Strings,0.000016,Success
+30,100000,Quick Sort,Strings,0.000017,Success
+30,100000,Python Timsort,Strings,0.000001,Success
+30,100000,Radix Sort,Strings,,Skipped — integers only
+50,100000,Shell Sort,Random Ints,0.000017,Success
+50,100000,Heap Sort,Random Ints,0.000005,Success
+50,100000,Merge Sort,Random Ints,0.000030,Success
+50,100000,Quick Sort,Random Ints,0.000028,Success
+50,100000,Python Timsort,Random Ints,0.000002,Success
+50,100000,Radix Sort,Random Ints,0.000013,Success
+50,100000,Shell Sort,Sorted Ints,0.000007,Success
+50,100000,Heap Sort,Sorted Ints,0.000004,Success
+50,100000,Merge Sort,Sorted Ints,0.000023,Success
+50,100000,Quick Sort,Sorted Ints,0.000026,Success
+50,100000,Python Timsort,Sorted Ints,0.000000,Success
+50,100000,Radix Sort,Sorted Ints,0.000007,Success
+50,100000,Shell Sort,Reverse Sorted,0.000012,Success
+50,100000,Heap Sort,Reverse Sorted,0.000003,Success
+50,100000,Merge Sort,Reverse Sorted,0.000024,Success
+50,100000,Quick Sort,Reverse Sorted,0.000026,Success
+50,100000,Python Timsort,Reverse Sorted,0.000000,Success
+50,100000,Radix Sort,Reverse Sorted,0.000007,Success
+50,100000,Shell Sort,Almost Sorted,0.000009,Success
+50,100000,Heap Sort,Almost Sorted,0.000004,Success
+50,100000,Merge Sort,Almost Sorted,0.000024,Success
+50,100000,Quick Sort,Almost Sorted,0.000027,Success
+50,100000,Python Timsort,Almost Sorted,0.000001,Success
+50,100000,Radix Sort,Almost Sorted,0.000007,Success
+50,100000,Shell Sort,Half Sorted,0.000013,Success
+50,100000,Heap Sort,Half Sorted,0.000004,Success
+50,100000,Merge Sort,Half Sorted,0.000025,Success
+50,100000,Quick Sort,Half Sorted,0.000023,Success
+50,100000,Python Timsort,Half Sorted,0.000001,Success
+50,100000,Radix Sort,Half Sorted,0.000007,Success
+50,100000,Shell Sort,Flat (Few Unique),0.000011,Success
+50,100000,Heap Sort,Flat (Few Unique),0.000004,Success
+50,100000,Merge Sort,Flat (Few Unique),0.000026,Success
+50,100000,Quick Sort,Flat (Few Unique),0.000008,Success
+50,100000,Python Timsort,Flat (Few Unique),0.000001,Success
+50,100000,Radix Sort,Flat (Few Unique),0.000005,Success
+50,100000,Shell Sort,Floats,0.000015,Success
+50,100000,Heap Sort,Floats,0.000004,Success
+50,100000,Merge Sort,Floats,0.000027,Success
+50,100000,Quick Sort,Floats,0.000028,Success
+50,100000,Python Timsort,Floats,0.000002,Success
+50,100000,Radix Sort,Floats,,Skipped — integers only
+50,100000,Shell Sort,Strings,0.000018,Success
+50,100000,Heap Sort,Strings,0.000006,Success
+50,100000,Merge Sort,Strings,0.000029,Success
+50,100000,Quick Sort,Strings,0.000031,Success
+50,100000,Python Timsort,Strings,0.000002,Success
+50,100000,Radix Sort,Strings,,Skipped — integers only
+100,100000,Shell Sort,Random Ints,0.000040,Success
+100,100000,Heap Sort,Random Ints,0.000009,Success
+100,100000,Merge Sort,Random Ints,0.000067,Success
+100,100000,Quick Sort,Random Ints,0.000063,Success
+100,100000,Python Timsort,Random Ints,0.000004,Success
+100,100000,Radix Sort,Random Ints,0.000022,Success
+100,100000,Shell Sort,Sorted Ints,0.000018,Success
+100,100000,Heap Sort,Sorted Ints,0.000008,Success
+100,100000,Merge Sort,Sorted Ints,0.000052,Success
+100,100000,Quick Sort,Sorted Ints,0.000059,Success
+100,100000,Python Timsort,Sorted Ints,0.000000,Success
+100,100000,Radix Sort,Sorted Ints,0.000012,Success
+100,100000,Shell Sort,Reverse Sorted,0.000028,Success
+100,100000,Heap Sort,Reverse Sorted,0.000008,Success
+100,100000,Merge Sort,Reverse Sorted,0.000054,Success
+100,100000,Quick Sort,Reverse Sorted,0.000057,Success
+100,100000,Python Timsort,Reverse Sorted,0.000000,Success
+100,100000,Radix Sort,Reverse Sorted,0.000016,Success
+100,100000,Shell Sort,Almost Sorted,0.000023,Success
+100,100000,Heap Sort,Almost Sorted,0.000008,Success
+100,100000,Merge Sort,Almost Sorted,0.000054,Success
+100,100000,Quick Sort,Almost Sorted,0.000058,Success
+100,100000,Python Timsort,Almost Sorted,0.000001,Success
+100,100000,Radix Sort,Almost Sorted,0.000012,Success
+100,100000,Shell Sort,Half Sorted,0.000033,Success
+100,100000,Heap Sort,Half Sorted,0.000008,Success
+100,100000,Merge Sort,Half Sorted,0.000056,Success
+100,100000,Quick Sort,Half Sorted,0.000051,Success
+100,100000,Python Timsort,Half Sorted,0.000002,Success
+100,100000,Radix Sort,Half Sorted,0.000014,Success
+100,100000,Shell Sort,Flat (Few Unique),0.000026,Success
+100,100000,Heap Sort,Flat (Few Unique),0.000009,Success
+100,100000,Merge Sort,Flat (Few Unique),0.000059,Success
+100,100000,Quick Sort,Flat (Few Unique),0.000013,Success
+100,100000,Python Timsort,Flat (Few Unique),0.000003,Success
+100,100000,Radix Sort,Flat (Few Unique),0.000008,Success
+100,100000,Shell Sort,Floats,0.000038,Success
+100,100000,Heap Sort,Floats,0.000008,Success
+100,100000,Merge Sort,Floats,0.000061,Success
+100,100000,Quick Sort,Floats,0.000064,Success
+100,100000,Python Timsort,Floats,0.000004,Success
+100,100000,Radix Sort,Floats,,Skipped — integers only
+100,100000,Shell Sort,Strings,0.000045,Success
+100,100000,Heap Sort,Strings,0.000013,Success
+100,100000,Merge Sort,Strings,0.000065,Success
+100,100000,Quick Sort,Strings,0.000070,Success
+100,100000,Python Timsort,Strings,0.000005,Success
+100,100000,Radix Sort,Strings,,Skipped — integers only
+1000,1000,Shell Sort,Random Ints,0.000822,Success
+1000,1000,Heap Sort,Random Ints,0.000114,Success
+1000,1000,Merge Sort,Random Ints,0.000857,Success
+1000,1000,Quick Sort,Random Ints,0.001014,Success
+1000,1000,Python Timsort,Random Ints,0.000057,Success
+1000,1000,Radix Sort,Random Ints,0.000205,Success
+1000,1000,Shell Sort,Sorted Ints,0.000404,Success
+1000,1000,Heap Sort,Sorted Ints,0.000108,Success
+1000,1000,Merge Sort,Sorted Ints,0.000708,Success
+1000,1000,Quick Sort,Sorted Ints,0.000982,Success
+1000,1000,Python Timsort,Sorted Ints,0.000002,Success
+1000,1000,Radix Sort,Sorted Ints,0.000142,Success
+1000,1000,Shell Sort,Reverse Sorted,0.000593,Success
+1000,1000,Heap Sort,Reverse Sorted,0.000106,Success
+1000,1000,Merge Sort,Reverse Sorted,0.000711,Success
+1000,1000,Quick Sort,Reverse Sorted,0.000986,Success
+1000,1000,Python Timsort,Reverse Sorted,0.000003,Success
+1000,1000,Radix Sort,Reverse Sorted,0.000176,Success
+1000,1000,Shell Sort,Almost Sorted,0.000595,Success
+1000,1000,Heap Sort,Almost Sorted,0.000110,Success
+1000,1000,Merge Sort,Almost Sorted,0.000770,Success
+1000,1000,Quick Sort,Almost Sorted,0.000993,Success
+1000,1000,Python Timsort,Almost Sorted,0.000014,Success
+1000,1000,Radix Sort,Almost Sorted,0.000150,Success
+1000,1000,Shell Sort,Half Sorted,0.000742,Success
+1000,1000,Heap Sort,Half Sorted,0.000117,Success
+1000,1000,Merge Sort,Half Sorted,0.000808,Success
+1000,1000,Quick Sort,Half Sorted,0.000895,Success
+1000,1000,Python Timsort,Half Sorted,0.000030,Success
+1000,1000,Radix Sort,Half Sorted,0.000183,Success
+1000,1000,Shell Sort,Flat (Few Unique),0.000455,Success
+1000,1000,Heap Sort,Flat (Few Unique),0.000111,Success
+1000,1000,Merge Sort,Flat (Few Unique),0.000794,Success
+1000,1000,Quick Sort,Flat (Few Unique),0.000136,Success
+1000,1000,Python Timsort,Flat (Few Unique),0.000036,Success
+1000,1000,Radix Sort,Flat (Few Unique),0.000065,Success
+1000,1000,Shell Sort,Floats,0.000842,Success
+1000,1000,Heap Sort,Floats,0.000109,Success
+1000,1000,Merge Sort,Floats,0.000845,Success
+1000,1000,Quick Sort,Floats,0.001019,Success
+1000,1000,Python Timsort,Floats,0.000053,Success
+1000,1000,Radix Sort,Floats,,Skipped — integers only
+1000,1000,Shell Sort,Strings,0.000916,Success
+1000,1000,Heap Sort,Strings,0.000178,Success
+1000,1000,Merge Sort,Strings,0.000906,Success
+1000,1000,Quick Sort,Strings,0.001131,Success
+1000,1000,Python Timsort,Strings,0.000080,Success
+1000,1000,Radix Sort,Strings,,Skipped — integers only
+10000,100,Shell Sort,Random Ints,0.016182,Success
+10000,100,Heap Sort,Random Ints,0.001655,Success
+10000,100,Merge Sort,Random Ints,0.011782,Success
+10000,100,Quick Sort,Random Ints,0.013957,Success
+10000,100,Python Timsort,Random Ints,0.000780,Success
+10000,100,Radix Sort,Random Ints,0.002523,Success
+10000,100,Shell Sort,Sorted Ints,0.006025,Success
+10000,100,Heap Sort,Sorted Ints,0.001407,Success
+10000,100,Merge Sort,Sorted Ints,0.009386,Success
+10000,100,Quick Sort,Sorted Ints,0.013278,Success
+10000,100,Python Timsort,Sorted Ints,0.000018,Success
+10000,100,Radix Sort,Sorted Ints,0.001922,Success
+10000,100,Shell Sort,Reverse Sorted,0.009147,Success
+10000,100,Heap Sort,Reverse Sorted,0.001331,Success
+10000,100,Merge Sort,Reverse Sorted,0.009475,Success
+10000,100,Quick Sort,Reverse Sorted,0.013323,Success
+10000,100,Python Timsort,Reverse Sorted,0.000028,Success
+10000,100,Radix Sort,Reverse Sorted,0.002244,Success
+10000,100,Shell Sort,Almost Sorted,0.010424,Success
+10000,100,Heap Sort,Almost Sorted,0.001408,Success
+10000,100,Merge Sort,Almost Sorted,0.010475,Success
+10000,100,Quick Sort,Almost Sorted,0.013365,Success
+10000,100,Python Timsort,Almost Sorted,0.000152,Success
+10000,100,Radix Sort,Almost Sorted,0.001908,Success
+10000,100,Shell Sort,Half Sorted,0.014027,Success
+10000,100,Heap Sort,Half Sorted,0.001590,Success
+10000,100,Merge Sort,Half Sorted,0.010560,Success
+10000,100,Quick Sort,Half Sorted,0.012460,Success
+10000,100,Python Timsort,Half Sorted,0.000414,Success
+10000,100,Radix Sort,Half Sorted,0.002198,Success
+10000,100,Shell Sort,Flat (Few Unique),0.006814,Success
+10000,100,Heap Sort,Flat (Few Unique),0.001250,Success
+10000,100,Merge Sort,Flat (Few Unique),0.010578,Success
+10000,100,Quick Sort,Flat (Few Unique),0.001377,Success
+10000,100,Python Timsort,Flat (Few Unique),0.000369,Success
+10000,100,Radix Sort,Flat (Few Unique),0.000596,Success
+10000,100,Shell Sort,Floats,0.015535,Success
+10000,100,Heap Sort,Floats,0.001665,Success
+10000,100,Merge Sort,Floats,0.011750,Success
+10000,100,Quick Sort,Floats,0.013956,Success
+10000,100,Python Timsort,Floats,0.000742,Success
+10000,100,Radix Sort,Floats,,Skipped — integers only
+10000,100,Shell Sort,Strings,0.016983,Success
+10000,100,Heap Sort,Strings,0.002424,Success
+10000,100,Merge Sort,Strings,0.012407,Success
+10000,100,Quick Sort,Strings,0.015267,Success
+10000,100,Python Timsort,Strings,0.001086,Success
+10000,100,Radix Sort,Strings,,Skipped — integers only
+100000,10,Shell Sort,Random Ints,0.260972,Success
+100000,10,Heap Sort,Random Ints,0.028385,Success
+100000,10,Merge Sort,Random Ints,0.150757,Success
+100000,10,Quick Sort,Random Ints,0.171519,Success
+100000,10,Python Timsort,Random Ints,0.010310,Success
+100000,10,Radix Sort,Random Ints,0.033289,Success
+100000,10,Shell Sort,Sorted Ints,0.074572,Success
+100000,10,Heap Sort,Sorted Ints,0.016996,Success
+100000,10,Merge Sort,Sorted Ints,0.115760,Success
+100000,10,Quick Sort,Sorted Ints,0.159751,Success
+100000,10,Python Timsort,Sorted Ints,0.000151,Success
+100000,10,Radix Sort,Sorted Ints,0.024599,Success
+100000,10,Shell Sort,Reverse Sorted,0.120559,Success
+100000,10,Heap Sort,Reverse Sorted,0.015693,Success
+100000,10,Merge Sort,Reverse Sorted,0.116743,Success
+100000,10,Quick Sort,Reverse Sorted,0.161722,Success
+100000,10,Python Timsort,Reverse Sorted,0.000262,Success
+100000,10,Radix Sort,Reverse Sorted,0.027317,Success
+100000,10,Shell Sort,Almost Sorted,0.169964,Success
+100000,10,Heap Sort,Almost Sorted,0.017802,Success
+100000,10,Merge Sort,Almost Sorted,0.132046,Success
+100000,10,Quick Sort,Almost Sorted,0.163002,Success
+100000,10,Python Timsort,Almost Sorted,0.001831,Success
+100000,10,Radix Sort,Almost Sorted,0.024949,Success
+100000,10,Shell Sort,Half Sorted,0.227016,Success
+100000,10,Heap Sort,Half Sorted,0.022993,Success
+100000,10,Merge Sort,Half Sorted,0.131926,Success
+100000,10,Quick Sort,Half Sorted,0.153094,Success
+100000,10,Python Timsort,Half Sorted,0.005256,Success
+100000,10,Radix Sort,Half Sorted,0.027685,Success
+100000,10,Shell Sort,Flat (Few Unique),0.082888,Success
+100000,10,Heap Sort,Flat (Few Unique),0.013917,Success
+100000,10,Merge Sort,Flat (Few Unique),0.129530,Success
+100000,10,Quick Sort,Flat (Few Unique),0.013539,Success
+100000,10,Python Timsort,Flat (Few Unique),0.003696,Success
+100000,10,Radix Sort,Flat (Few Unique),0.006740,Success
+100000,10,Shell Sort,Floats,0.257243,Success
+100000,10,Heap Sort,Floats,0.028369,Success
+100000,10,Merge Sort,Floats,0.148154,Success
+100000,10,Quick Sort,Floats,0.173647,Success
+100000,10,Python Timsort,Floats,0.009839,Success
+100000,10,Radix Sort,Floats,,Skipped — integers only
+100000,10,Shell Sort,Strings,0.285188,Success
+100000,10,Heap Sort,Strings,0.034672,Success
+100000,10,Merge Sort,Strings,0.158236,Success
+100000,10,Quick Sort,Strings,0.192645,Success
+100000,10,Python Timsort,Strings,0.014375,Success
+100000,10,Radix Sort,Strings,,Skipped — integers only
+1000000,1,Shell Sort,Random Ints,5.120206,Success
+1000000,1,Heap Sort,Random Ints,0.745895,Success
+1000000,1,Merge Sort,Random Ints,1.917300,Success
+1000000,1,Quick Sort,Random Ints,2.143606,Success
+1000000,1,Python Timsort,Random Ints,0.150170,Success
+1000000,1,Radix Sort,Random Ints,0.848897,Success
+1000000,1,Shell Sort,Sorted Ints,0.961344,Success
+1000000,1,Heap Sort,Sorted Ints,0.257628,Success
+1000000,1,Merge Sort,Sorted Ints,1.418039,Success
+1000000,1,Quick Sort,Sorted Ints,1.851532,Success
+1000000,1,Python Timsort,Sorted Ints,0.003498,Success
+1000000,1,Radix Sort,Sorted Ints,0.423312,Success
+1000000,1,Shell Sort,Reverse Sorted,1.440647,Success
+1000000,1,Heap Sort,Reverse Sorted,0.212721,Success
+1000000,1,Merge Sort,Reverse Sorted,1.450004,Success
+1000000,1,Quick Sort,Reverse Sorted,1.907124,Success
+1000000,1,Python Timsort,Reverse Sorted,0.005350,Success
+1000000,1,Radix Sort,Reverse Sorted,0.487011,Success
+1000000,1,Shell Sort,Almost Sorted,2.561470,Success
+1000000,1,Heap Sort,Almost Sorted,0.287819,Success
+1000000,1,Merge Sort,Almost Sorted,1.669354,Success
+1000000,1,Quick Sort,Almost Sorted,1.989318,Success
+1000000,1,Python Timsort,Almost Sorted,0.033712,Success
+1000000,1,Radix Sort,Almost Sorted,0.484287,Success
+1000000,1,Shell Sort,Half Sorted,4.133066,Success
+1000000,1,Heap Sort,Half Sorted,0.492394,Success
+1000000,1,Merge Sort,Half Sorted,1.670844,Success
+1000000,1,Quick Sort,Half Sorted,1.966768,Success
+1000000,1,Python Timsort,Half Sorted,0.075521,Success
+1000000,1,Radix Sort,Half Sorted,0.626331,Success
+1000000,1,Shell Sort,Flat (Few Unique),0.999626,Success
+1000000,1,Heap Sort,Flat (Few Unique),0.157288,Success
+1000000,1,Merge Sort,Flat (Few Unique),1.583329,Success
+1000000,1,Quick Sort,Flat (Few Unique),0.132527,Success
+1000000,1,Python Timsort,Flat (Few Unique),0.039397,Success
+1000000,1,Radix Sort,Flat (Few Unique),0.076017,Success
+1000000,1,Shell Sort,Floats,5.060065,Success
+1000000,1,Heap Sort,Floats,0.753849,Success
+1000000,1,Merge Sort,Floats,1.892099,Success
+1000000,1,Quick Sort,Floats,2.226179,Success
+1000000,1,Python Timsort,Floats,0.148325,Success
+1000000,1,Radix Sort,Floats,,Skipped — integers only
+1000000,1,Shell Sort,Strings,5.559434,Success
+1000000,1,Heap Sort,Strings,0.790997,Success
+1000000,1,Merge Sort,Strings,2.161371,Success
+1000000,1,Quick Sort,Strings,2.570922,Success
+1000000,1,Python Timsort,Strings,0.229685,Success
+1000000,1,Radix Sort,Strings,,Skipped — integers only

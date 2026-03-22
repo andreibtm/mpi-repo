@@ -1,0 +1,97 @@
+Size,Iterations,Algorithm,Data Shape,Avg Time (s),Status
+1000,1000,LL Merge Sort,Random Ints,0.000894,Success
+1000,1000,LL Insertion Sort,Random Ints,0.006680,Success
+1000,1000,Merge Sort,Random Ints,0.000845,Success
+1000,1000,Insertion Sort,Random Ints,0.011413,Success
+1000,1000,LL Merge Sort,Sorted Ints,0.000723,Success
+1000,1000,LL Insertion Sort,Sorted Ints,0.013054,Success
+1000,1000,Merge Sort,Sorted Ints,0.000699,Success
+1000,1000,Insertion Sort,Sorted Ints,0.000052,Success
+1000,1000,LL Merge Sort,Reverse Sorted,0.000708,Success
+1000,1000,LL Insertion Sort,Reverse Sorted,0.000196,Success
+1000,1000,Merge Sort,Reverse Sorted,0.000733,Success
+1000,1000,Insertion Sort,Reverse Sorted,0.033508,Success
+1000,1000,LL Merge Sort,Almost Sorted,0.000802,Success
+1000,1000,LL Insertion Sort,Almost Sorted,0.012753,Success
+1000,1000,Merge Sort,Almost Sorted,0.000765,Success
+1000,1000,Insertion Sort,Almost Sorted,0.000645,Success
+1000,1000,LL Merge Sort,Half Sorted,0.000815,Success
+1000,1000,LL Insertion Sort,Half Sorted,0.009904,Success
+1000,1000,Merge Sort,Half Sorted,0.000788,Success
+1000,1000,Insertion Sort,Half Sorted,0.005679,Success
+1000,1000,LL Merge Sort,Flat (Few Unique),0.000844,Success
+1000,1000,LL Insertion Sort,Flat (Few Unique),0.007700,Success
+1000,1000,Merge Sort,Flat (Few Unique),0.000783,Success
+1000,1000,Insertion Sort,Flat (Few Unique),0.008607,Success
+1000,1000,LL Merge Sort,Floats,0.000877,Success
+1000,1000,LL Insertion Sort,Floats,0.006573,Success
+1000,1000,Merge Sort,Floats,0.000836,Success
+1000,1000,Insertion Sort,Floats,0.011600,Success
+1000,1000,LL Merge Sort,Strings,0.000955,Success
+1000,1000,LL Insertion Sort,Strings,0.008290,Success
+1000,1000,Merge Sort,Strings,0.000904,Success
+1000,1000,Insertion Sort,Strings,0.013021,Success
+10000,100,LL Merge Sort,Random Ints,0.010965,Success
+10000,100,LL Insertion Sort,Random Ints,0.667586,Success
+10000,100,Merge Sort,Random Ints,0.011608,Success
+10000,100,Insertion Sort,Random Ints,1.244099,Success
+10000,100,LL Merge Sort,Sorted Ints,0.008244,Success
+10000,100,LL Insertion Sort,Sorted Ints,1.291594,Success
+10000,100,Merge Sort,Sorted Ints,0.010286,Success
+10000,100,Insertion Sort,Sorted Ints,0.000547,Success
+10000,100,LL Merge Sort,Reverse Sorted,0.008399,Success
+10000,100,LL Insertion Sort,Reverse Sorted,0.002238,Success
+10000,100,Merge Sort,Reverse Sorted,0.010650,Success
+10000,100,Insertion Sort,Reverse Sorted,2.340757,Success
+10000,100,LL Merge Sort,Almost Sorted,0.010089,Success
+10000,100,LL Insertion Sort,Almost Sorted,1.267155,Success
+10000,100,Merge Sort,Almost Sorted,0.011904,Success
+10000,100,Insertion Sort,Almost Sorted,0.068456,Success
+10000,100,LL Merge Sort,Half Sorted,0.009857,Success
+10000,100,LL Insertion Sort,Half Sorted,0.984196,Success
+10000,100,Merge Sort,Half Sorted,0.011562,Success
+10000,100,Insertion Sort,Half Sorted,0.604486,Success
+10000,100,LL Merge Sort,Flat (Few Unique),0.010274,Success
+10000,100,LL Insertion Sort,Flat (Few Unique),0.744051,Success
+10000,100,Merge Sort,Flat (Few Unique),0.010452,Success
+10000,100,Insertion Sort,Flat (Few Unique),0.906176,Success
+10000,100,LL Merge Sort,Floats,0.010939,Success
+10000,100,LL Insertion Sort,Floats,0.658127,Success
+10000,100,Merge Sort,Floats,0.011610,Success
+10000,100,Insertion Sort,Floats,1.316224,Success
+10000,100,LL Merge Sort,Strings,0.012049,Success
+10000,100,LL Insertion Sort,Strings,0.914047,Success
+10000,100,Merge Sort,Strings,0.012274,Success
+10000,100,Insertion Sort,Strings,1.409884,Success
+100000,10,LL Merge Sort,Random Ints,0.139216,Success
+100000,10,LL Insertion Sort,Random Ints,73.283622,Success
+100000,10,Merge Sort,Random Ints,0.147045,Success
+100000,10,Insertion Sort,Random Ints,,Skipped — O(n²) too slow
+100000,10,LL Merge Sort,Sorted Ints,0.099607,Success
+100000,10,LL Insertion Sort,Sorted Ints,128.547762,Success
+100000,10,Merge Sort,Sorted Ints,0.112988,Success
+100000,10,Insertion Sort,Sorted Ints,,Skipped — O(n²) too slow
+100000,10,LL Merge Sort,Reverse Sorted,0.096820,Success
+100000,10,LL Insertion Sort,Reverse Sorted,0.025481,Success
+100000,10,Merge Sort,Reverse Sorted,0.113063,Success
+100000,10,Insertion Sort,Reverse Sorted,,Skipped — O(n²) too slow
+100000,10,LL Merge Sort,Almost Sorted,0.121043,Success
+100000,10,LL Insertion Sort,Almost Sorted,125.995902,Success
+100000,10,Merge Sort,Almost Sorted,0.129116,Success
+100000,10,Insertion Sort,Almost Sorted,,Skipped — O(n²) too slow
+100000,10,LL Merge Sort,Half Sorted,0.121940,Success
+100000,10,LL Insertion Sort,Half Sorted,99.589896,Success
+100000,10,Merge Sort,Half Sorted,0.129371,Success
+100000,10,Insertion Sort,Half Sorted,,Skipped — O(n²) too slow
+100000,10,LL Merge Sort,Flat (Few Unique),0.123242,Success
+100000,10,LL Insertion Sort,Flat (Few Unique),75.823994,Success
+100000,10,Merge Sort,Flat (Few Unique),0.128929,Success
+100000,10,Insertion Sort,Flat (Few Unique),,Skipped — O(n²) too slow
+100000,10,LL Merge Sort,Floats,0.128394,Success
+100000,10,LL Insertion Sort,Floats,73.604307,Success
+100000,10,Merge Sort,Floats,0.143677,Success
+100000,10,Insertion Sort,Floats,,Skipped — O(n²) too slow
+100000,10,LL Merge Sort,Strings,0.147736,Success
+100000,10,LL Insertion Sort,Strings,107.682248,Success
+100000,10,Merge Sort,Strings,0.154604,Success
+100000,10,Insertion Sort,Strings,,Skipped — O(n²) too slow
