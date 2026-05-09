@@ -1,133 +1,96 @@
-# Sorting Algorithms Benchmark Suite
+# Sorting Algorithms Benchmark Suite — v2
 
-A clean, modular benchmarking framework for comparing sorting algorithm performance across different input sizes, data structures, and data patterns.
+A modular benchmarking framework comparing sorting algorithms across input size,
+data shape, element type, data structure, and hardware platform.
 
----
+## What's new in v2
 
-## Structure
+- **Nanosecond timing** — uses `time.perf_counter_ns()` so no result ever shows 0
+- **Custom Timsort** — hand-written Python implementation alongside the built-in
+- **Counting Sort** added (non-comparative, integer arrays with bounded range)
+- **Shell Sort** now uses the Knuth gap sequence (much better than n//2)
+- **Standard deviation, min, max** recorded for every measurement
+- **Timsort comparison category** — `--category timsort` isolates the comparison
+
+## Project structure
 
 ```
 ├── algorithms/
-│   └── __init__.py      # All algorithm implementations + registry
-├── generators.py        # All data generators + registry
-├── cli.py               # Main benchmark runner
-├── graph.py             # Result visualisation
+│   └── __init__.py    # All implementations + ALGORITHMS registry
+├── generators.py      # All data generators + GENERATORS registry
+├── cli.py             # Benchmark runner
+├── graph.py           # Charting
 └── README.md
 ```
-
----
 
 ## Algorithms
 
 | Algorithm | Complexity | Notes |
 | :--- | :--- | :--- |
 | Bubble Sort | O(n²) | Early-exit optimisation |
-| Selection Sort | O(n²) | |
-| Insertion Sort | O(n²) | Best on nearly-sorted data |
-| Shell Sort | O(n log n) | Gap-sequence variant |
-| Heap Sort | O(n log n) | In-place via heapq |
+| Selection Sort | O(n²) | No adaptivity |
+| Insertion Sort | O(n²) | Highly adaptive |
+| Shell Sort | O(n^1.5) | Knuth gap sequence |
+| Heap Sort | O(n log n) | In-place |
 | Merge Sort | O(n log n) | Stable |
-| Quick Sort | O(n log n) avg | Randomised pivot |
-| Python Timsort | O(n log n) | Built-in `list.sort()` |
+| Quick Sort | O(n log n) avg | Randomised pivot, 3-way partition |
+| Timsort (built-in) | O(n log n) | Python's C-level list.sort() |
+| Timsort (custom) | O(n log n) | Hand-written Python implementation |
 | Radix Sort | O(nk) | Integers only |
-| LL Merge Sort | O(n log n) | On linked list, O(1) extra space |
-| LL Insertion Sort | O(n²) | On linked list |
-| Parallel Merge Sort | O(n log n) | multiprocessing, ≥10k elements |
-
----
-
-## Data Generators
-
-| Name | Description |
-| :--- | :--- |
-| Random Ints | Uniformly random integers |
-| Sorted Ints | Fully ascending |
-| Reverse Sorted | Fully descending |
-| Almost Sorted | 98% sorted, 2% randomly swapped |
-| Half Sorted | First half sorted, second half random |
-| Flat (Few Unique) | Only 5 distinct values — high duplicates |
-| Floats | Random floats |
-| Strings | Random 5-char lowercase strings |
-
----
+| Counting Sort | O(n+k) | Integers only, bounded range |
+| LL Merge Sort | O(n log n) | Linked list, O(1) extra space |
+| LL Insertion Sort | O(n²) | Linked list |
+| Parallel Merge Sort | O(n log n) | multiprocessing, large inputs only |
 
 ## Usage
 
 ```bash
-# Full benchmark — all algorithms, all data shapes, auto-scaled iterations
+# Full benchmark
 python cli.py
 
-# Fast algorithms only, large sizes
+# Timsort built-in vs custom vs competitors
+python cli.py --category timsort --sizes 20 30 50 100 1000 10000 100000 1000000
+
+# Fast algorithms only
 python cli.py --category fast --sizes 100000 1000000
 
-# O(n²) algorithms with small sizes and many iterations
-python cli.py --category slow --sizes 20 30 50 100 --iterations 100000
+# O(n^2) algorithms, small sizes
+python cli.py --category slow --sizes 20 30 50 100 1000
 
-# Linked list vs array comparison
+# Linked list comparison
 python cli.py --category linked --sizes 1000 10000 100000
 
-# Parallel sorting
-python cli.py --category parallel --sizes 100000 1000000
-
-# Specific algorithms and sizes
-python cli.py --algorithms "Quick Sort" "Merge Sort" "Radix Sort" --sizes 50000
-
-# Custom output file
-python cli.py --output my_run.md
+# Save to specific file
+python cli.py --output results_mac.md
 ```
 
-### Categories
-
-| Category | Algorithms included |
-| :--- | :--- |
-| `all` | Everything (default) |
-| `fast` | Shell, Heap, Merge, Quick, Timsort, Radix |
-| `slow` | Bubble, Selection, Insertion |
-| `linked` | LL Merge Sort, LL Insertion Sort + array equivalents |
-| `parallel` | Parallel Merge Sort vs Timsort vs Merge Sort |
-| `integer` | Radix Sort + comparison sorts |
-
----
-
-## Visualisation
+## Charting
 
 ```bash
-# Plot Random Ints results (default)
+# Plot Random Ints
 python graph.py
 
-# Plot a specific data shape
-python graph.py --shape "Reverse Sorted"
+# Timsort comparison panel
+python graph.py --category timsort --save timsort_comparison.png
 
-# Save to file
-python graph.py --shape "Almost Sorted" --save almost_sorted.png
+# Compare two machines
+python graph.py --compare results_mac.csv results_windows.csv \
+                --labels "Apple M4" "Windows x86" --shape "Random Ints"
 ```
 
----
+## Timing methodology
 
-## Iteration Scaling
-
-For small lists, a single sort is too fast to measure reliably.
-The benchmark auto-scales iterations per size:
+All measurements use `time.perf_counter_ns()` (nanosecond resolution).
+A fresh random array is generated for every iteration.
+Iteration counts scale inversely with input size:
 
 | Size | Default iterations |
 | ---: | ---: |
-| 20 | 100,000 |
-| 30 | 100,000 |
-| 50 | 100,000 |
-| 100 | 100,000 |
+| 20 – 100 | 100,000 |
 | 1,000 | 1,000 |
 | 10,000 | 100 |
 | 100,000 | 10 |
-| 1,000,000 | 1 |
+| 1,000,000 | 3 |
 
-Override with `--iterations N` to use the same count for every size.
-
----
-
-## Notes
-
-- O(n²) algorithms are automatically skipped for sizes > 10,000
-- Radix Sort is skipped for Floats and Strings (integers only)
-- Parallel Merge Sort is skipped for sizes < 10,000 (overhead dominates)
-- Fresh data is generated for every iteration (critical for small-list accuracy)
-- Results are saved as both `.md` (human-readable) and `.csv` (for graphing/analysis)
+The CSV output includes average, standard deviation, min, and max for every
+(algorithm, shape, size) triple.

@@ -1,109 +1,146 @@
 """
 Sorting Algorithm Benchmark Suite
 ==================================
-The single entry point for running all benchmarks.
-
 Usage examples
 --------------
-# Full run — all algorithms, all data shapes, sensible default sizes
+# Full run (all algorithms, all shapes, default sizes)
 python cli.py
 
-# Only the fast O(n log n) algorithms, custom sizes
+# Fast algorithms only
 python cli.py --category fast --sizes 10000 100000 1000000
 
-# Only the O(n²) algorithms with small sizes and many iterations
-python cli.py --category slow --sizes 20 30 50 100 --iterations 10000
+# O(n^2) algorithms, small sizes
+python cli.py --category slow --sizes 20 30 50 100 1000
+
+# Timsort comparison only
+python cli.py --category timsort
 
 # Linked list comparison
 python cli.py --category linked --sizes 1000 10000 100000
 
-# Parallel sorting (needs large inputs to beat single-core)
+# Parallel sort
 python cli.py --category parallel --sizes 100000 1000000
 
-# Specific algorithms, specific sizes
-python cli.py --algorithms "Quick Sort" "Merge Sort" "Radix Sort" --sizes 50000 500000
-
-# Save results to a custom file
-python cli.py --output my_results.md
+# Custom
+python cli.py --algorithms "Quick Sort" "Merge Sort" --sizes 100000
 """
 
 import argparse
 import csv
 import sys
 import time
+import statistics
 
 from algorithms import ALGORITHMS
 from generators import GENERATORS
 
-# ── Constants ──────────────────────────────────────────────────────────────────
+# ---------------------------------------------------------------------------
+# Constants
+# ---------------------------------------------------------------------------
 
-# Algorithms that only work on integers
-INTEGER_ONLY = {"Radix Sort"}
+INTEGER_ONLY = {"Radix Sort", "Counting Sort"}
 
 # Default sizes and their iteration counts.
-# Small sizes get many iterations so individual timings are meaningful.
+# For small n, many iterations are needed because a single sort is too fast
+# to measure reliably even with nanosecond resolution.
 DEFAULT_SIZES = {
-    20:       100_000,
-    30:       100_000,
-    50:       100_000,
-    100:      100_000,
-    1_000:    1_000,
-    10_000:   100,
-    100_000:  10,
-    1_000_000: 1,
+    20:          100_000,
+    30:          100_000,
+    50:          100_000,
+    100:         100_000,
+    1_000:       1_000,
+    10_000:      100,
+    100_000:     10,
+    1_000_000:   3,
 }
 
-# Category presets
 CATEGORIES = {
     "all":     sorted(ALGORITHMS.keys()),
     "fast":    ["Shell Sort", "Heap Sort", "Merge Sort", "Quick Sort",
-                "Python Timsort", "Radix Sort"],
+                "Timsort (built-in)", "Timsort (custom)", "Radix Sort", "Counting Sort"],
     "slow":    ["Bubble Sort", "Selection Sort", "Insertion Sort"],
+    "timsort": ["Timsort (built-in)", "Timsort (custom)", "Merge Sort",
+                "Insertion Sort", "Quick Sort"],
     "linked":  ["LL Merge Sort", "LL Insertion Sort", "Merge Sort", "Insertion Sort"],
-    "parallel":["Parallel Merge Sort", "Python Timsort", "Merge Sort"],
-    "integer": ["Radix Sort", "Quick Sort", "Merge Sort", "Python Timsort"],
+    "parallel":["Parallel Merge Sort", "Timsort (built-in)", "Merge Sort"],
+    "integer": ["Radix Sort", "Counting Sort", "Quick Sort", "Merge Sort",
+                "Timsort (built-in)", "Timsort (custom)"],
 }
 
-# ── Skip logic ─────────────────────────────────────────────────────────────────
+# ---------------------------------------------------------------------------
+# Skip logic
+# ---------------------------------------------------------------------------
 
 def should_skip(alg_name, complexity, gen_name, size):
-    """Return a skip reason string, or None if the test should run."""
+    """Return a reason string if this combination should be skipped, else None."""
     if complexity == "n2" and size > 10_000:
-        return "Skipped — O(n²) too slow"
+        return "Skipped (O(n^2) too slow)"
     if complexity == "linked" and size > 500_000:
-        return "Skipped — LL overhead too high"
+        return "Skipped (LL overhead too high)"
     if complexity == "parallel" and size < 10_000:
-        return "Skipped — parallel overhead dominates"
+        return "Skipped (parallel overhead dominates)"
     if alg_name in INTEGER_ONLY and gen_name in ("Floats", "Strings"):
-        return "Skipped — integers only"
+        return "Skipped (integers only)"
+    # LL Insertion Sort is extremely slow on large sorted/almost-sorted inputs
+    if alg_name == "LL Insertion Sort" and size >= 100_000 and gen_name not in ("Reverse Sorted",):
+        return "Skipped (LL Insertion Sort too slow at this size)"
     return None
 
-# ── Benchmark runner ───────────────────────────────────────────────────────────
+# ---------------------------------------------------------------------------
+# Timing
+# ---------------------------------------------------------------------------
 
 def run_benchmark(func, generator, size, iterations):
     """
-    Run `func` on `iterations` freshly-generated lists of length `size`.
-    Returns the average time in seconds.
-    Fresh data is generated each iteration so small-list results are
-    statistically meaningful across different random inputs.
+    Run func on `iterations` independently generated arrays of length `size`.
+
+    Timing uses time.perf_counter_ns() (nanosecond resolution) to avoid
+    the 0 ns results that occur with second-resolution timers on fast
+    algorithms at small sizes. The average time is returned in nanoseconds.
+
+    A fresh array is generated for every iteration so that:
+      - Already-sorted algorithms do not benefit from a pre-sorted residue
+      - Results reflect the true distribution of inputs, not one fixed sample
     """
-    total = 0.0
+    total_ns = 0
+    times_ns = []
+
     for _ in range(iterations):
         data = generator(size)
-        t0 = time.perf_counter()
+        t0 = time.perf_counter_ns()
         func(data)
-        total += time.perf_counter() - t0
-    return total / iterations
+        elapsed = time.perf_counter_ns() - t0
+        total_ns += elapsed
+        times_ns.append(elapsed)
 
-# ── Output helpers ─────────────────────────────────────────────────────────────
+    avg_ns  = total_ns / iterations
+    std_ns  = statistics.stdev(times_ns) if len(times_ns) > 1 else 0
+    min_ns  = min(times_ns)
+    max_ns  = max(times_ns)
 
-def iterations_for_size(size, user_override):
-    """Return how many iterations to use for this size."""
-    if user_override is not None:
-        return user_override
-    return DEFAULT_SIZES.get(size, 1)
+    return avg_ns, std_ns, min_ns, max_ns
 
-# ── Main benchmark suite ───────────────────────────────────────────────────────
+# ---------------------------------------------------------------------------
+# Formatting helpers
+# ---------------------------------------------------------------------------
+
+def fmt_ns(ns):
+    """Format nanoseconds into a human-readable string."""
+    if ns < 1_000:
+        return f"{ns:.1f} ns"
+    elif ns < 1_000_000:
+        return f"{ns/1_000:.2f} us"
+    elif ns < 1_000_000_000:
+        return f"{ns/1_000_000:.3f} ms"
+    else:
+        return f"{ns/1_000_000_000:.4f} s"
+
+def ns_to_s(ns):
+    return ns / 1_000_000_000
+
+# ---------------------------------------------------------------------------
+# Main benchmark suite
+# ---------------------------------------------------------------------------
 
 def benchmark_suite(algorithms, sizes, iterations_override, md_path):
     csv_path = md_path.replace(".md", ".csv")
@@ -111,9 +148,9 @@ def benchmark_suite(algorithms, sizes, iterations_override, md_path):
     print(f"\n  Sorting Benchmark Suite")
     print(f"  Algorithms : {len(algorithms)}")
     print(f"  Sizes      : {sizes}")
+    print(f"  Timing     : nanosecond resolution (time.perf_counter_ns)")
     print(f"  Output     : {md_path}  +  {csv_path}\n")
 
-    # Validate algorithm names up front
     unknown = [a for a in algorithms if a not in ALGORITHMS]
     if unknown:
         print(f"Unknown algorithms: {unknown}")
@@ -122,19 +159,21 @@ def benchmark_suite(algorithms, sizes, iterations_override, md_path):
 
     with open(md_path, "w") as md, open(csv_path, "w", newline="") as cf:
         writer = csv.writer(cf)
-        writer.writerow(["Size", "Iterations", "Algorithm", "Data Shape",
-                         "Avg Time (s)", "Status"])
+        writer.writerow([
+            "Size", "Iterations", "Algorithm", "Data Shape",
+            "Avg (ns)", "Avg (s)", "Std (ns)", "Min (ns)", "Max (ns)", "Status"
+        ])
 
         md.write("# Sorting Algorithm Benchmark Results\n\n")
-        md.write("> Generated by `cli.py`\n\n")
+        md.write("> Timing: `time.perf_counter_ns()` — nanosecond resolution\n\n")
 
         for size in sorted(sizes):
-            iters = iterations_for_size(size, iterations_override)
+            iters = iterations_override if iterations_override else DEFAULT_SIZES.get(size, 1)
             print(f"  Size {size:>10,}  ({iters:,} iterations each)")
 
-            md.write(f"## Size: {size:,} elements  ×  {iters:,} iterations\n\n")
-            md.write("| Algorithm | Data Shape | Avg Time (s) | Status |\n")
-            md.write("| :--- | :--- | ---: | :--- |\n")
+            md.write(f"## Size: {size:,}  x  {iters:,} iterations\n\n")
+            md.write("| Algorithm | Data Shape | Avg Time | Std Dev | Min | Max | Status |\n")
+            md.write("| :--- | :--- | ---: | ---: | ---: | ---: | :--- |\n")
 
             for gen_name, generator in GENERATORS.items():
                 for alg_name in algorithms:
@@ -142,80 +181,80 @@ def benchmark_suite(algorithms, sizes, iterations_override, md_path):
 
                     reason = should_skip(alg_name, complexity, gen_name, size)
                     if reason:
-                        md.write(f"| {alg_name} | {gen_name} | — | {reason} |\n")
-                        writer.writerow([size, iters, alg_name, gen_name, "", reason])
+                        md.write(f"| {alg_name} | {gen_name} | — | — | — | — | {reason} |\n")
+                        writer.writerow([size, iters, alg_name, gen_name,
+                                         "", "", "", "", "", reason])
                         continue
 
                     try:
-                        avg = run_benchmark(func, generator, size, iters)
-                        print(f"    {'✓':1}  {alg_name:<22} | {gen_name:<20} | {avg:.6f}s")
-                        md.write(f"| **{alg_name}** | {gen_name} | {avg:.6f} | ✓ |\n")
-                        writer.writerow([size, iters, alg_name, gen_name,
-                                         f"{avg:.6f}", "Success"])
+                        avg_ns, std_ns, min_ns, max_ns = run_benchmark(
+                            func, generator, size, iters
+                        )
+                        avg_s = ns_to_s(avg_ns)
+                        print(f"    OK  {alg_name:<26} | {gen_name:<20} | {fmt_ns(avg_ns)}")
+                        md.write(
+                            f"| **{alg_name}** | {gen_name} | {fmt_ns(avg_ns)} | "
+                            f"{fmt_ns(std_ns)} | {fmt_ns(min_ns)} | {fmt_ns(max_ns)} | OK |\n"
+                        )
+                        writer.writerow([
+                            size, iters, alg_name, gen_name,
+                            f"{avg_ns:.1f}", f"{avg_s:.9f}",
+                            f"{std_ns:.1f}", f"{min_ns:.1f}", f"{max_ns:.1f}", "Success"
+                        ])
                     except RecursionError:
                         msg = "RecursionError"
-                        print(f"    {'✗':1}  {alg_name:<22} | {gen_name:<20} | {msg}")
-                        md.write(f"| {alg_name} | {gen_name} | — | {msg} |\n")
-                        writer.writerow([size, iters, alg_name, gen_name, "", msg])
+                        print(f"    !!  {alg_name:<26} | {gen_name:<20} | {msg}")
+                        md.write(f"| {alg_name} | {gen_name} | — | — | — | — | {msg} |\n")
+                        writer.writerow([size, iters, alg_name, gen_name,
+                                         "", "", "", "", "", msg])
                     except Exception as e:
-                        msg = type(e).__name__
-                        print(f"    {'✗':1}  {alg_name:<22} | {gen_name:<20} | {msg}")
-                        md.write(f"| {alg_name} | {gen_name} | — | {msg} |\n")
-                        writer.writerow([size, iters, alg_name, gen_name, "", msg])
+                        msg = f"{type(e).__name__}: {e}"
+                        print(f"    !!  {alg_name:<26} | {gen_name:<20} | {msg}")
+                        md.write(f"| {alg_name} | {gen_name} | — | — | — | — | {msg} |\n")
+                        writer.writerow([size, iters, alg_name, gen_name,
+                                         "", "", "", "", "", msg])
 
             md.write("\n---\n\n")
             print()
 
-    print(f"  Done!  {md_path}  and  {csv_path}\n")
+    print(f"  Done!  Results saved to {md_path} and {csv_path}\n")
 
-# ── CLI ────────────────────────────────────────────────────────────────────────
+# ---------------------------------------------------------------------------
+# CLI
+# ---------------------------------------------------------------------------
 
 def main():
     parser = argparse.ArgumentParser(
-        description="Benchmark sorting algorithms.",
+        description="Benchmark sorting algorithms with nanosecond precision.",
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 Categories
 ----------
-  all      — every algorithm (default)
-  fast     — O(n log n) + Radix Sort
-  slow     — O(n²) algorithms only
-  linked   — linked list variants vs array equivalents
-  parallel — parallel merge sort vs single-core
-  integer  — integer-optimised algorithms
+  all      - every algorithm (default)
+  fast     - O(n log n) + non-comparative
+  slow     - O(n^2) only
+  timsort  - built-in vs custom Timsort + closest competitors
+  linked   - linked list vs array equivalents
+  parallel - parallel merge sort vs single-core
+  integer  - integer-optimised algorithms
 
 Examples
 --------
   python cli.py
+  python cli.py --category timsort --sizes 1000 10000 100000 1000000
+  python cli.py --category slow --sizes 20 30 50 100 1000
   python cli.py --category fast --sizes 100000 1000000
-  python cli.py --category slow --sizes 20 30 50 100 --iterations 100000
-  python cli.py --algorithms "Quick Sort" "Merge Sort" --sizes 10000 100000
+  python cli.py --algorithms "Quick Sort" "Merge Sort" --sizes 10000
         """
     )
-    parser.add_argument(
-        "--algorithms", nargs="+", default=None,
-        help="Specific algorithm names (space-separated)."
-    )
-    parser.add_argument(
-        "--category", choices=list(CATEGORIES.keys()), default=None,
-        help="Preset algorithm group (overrides --algorithms)."
-    )
-    parser.add_argument(
-        "--sizes", type=int, nargs="+", default=None,
-        help="Input sizes to test. Defaults: 20 30 50 100 1000 10000 100000 1000000"
-    )
-    parser.add_argument(
-        "--iterations", type=int, default=None,
-        help="Override iteration count for every size (default: auto-scaled per size)."
-    )
-    parser.add_argument(
-        "--output", default="benchmark_results.md",
-        help="Markdown output filename (a .csv is also written alongside it)."
-    )
-
+    parser.add_argument("--algorithms", nargs="+", default=None)
+    parser.add_argument("--category", choices=list(CATEGORIES.keys()), default=None)
+    parser.add_argument("--sizes", type=int, nargs="+", default=None)
+    parser.add_argument("--iterations", type=int, default=None,
+                        help="Override iteration count for all sizes.")
+    parser.add_argument("--output", default="benchmark_results.md")
     args = parser.parse_args()
 
-    # Resolve algorithm list
     if args.category:
         algorithms = CATEGORIES[args.category]
     elif args.algorithms:
@@ -223,11 +262,7 @@ Examples
     else:
         algorithms = CATEGORIES["all"]
 
-    # Resolve sizes
-    if args.sizes:
-        sizes = sorted(set(args.sizes))
-    else:
-        sizes = sorted(DEFAULT_SIZES.keys())
+    sizes = sorted(set(args.sizes)) if args.sizes else sorted(DEFAULT_SIZES.keys())
 
     benchmark_suite(
         algorithms=algorithms,
